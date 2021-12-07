@@ -1,14 +1,18 @@
 version: "3.4"
 services:
   app:
-    image: node:16.13-bullseye-slim
+    build: 
+      context: docker/
+      args: 
+        - FIX_UID=${FIX_UID}
+        - FIX_GID=${FIX_GID}
     entrypoint: /bin/sleep infinity
     working_dir: /usr/src/app/
     volumes:
       - "../app:/usr/src/app:cached"
     ports:
-      - "3000:3000"
+      - "${PROJECT_PORT}:${PROJECT_PORT}"
     environment:
       - DNSDOCK_ALIAS=${PROJECT_NAME}.${PROJECT_VENDOR}.docker
       - VIRTUAL_HOST=${PROJECT_NAME}.${PROJECT_VENDOR}.docker
-      - VIRTUAL_PORT=3000
+      - VIRTUAL_PORT=${PROJECT_PORT}

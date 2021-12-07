@@ -33,15 +33,23 @@ cd your-new-project-dir && rm -rf .git LICENSE
 
 ### 2. Define your project name and group
 
-Edit the configuration file `.env`, changing `__PROJECT__` and `__VENDOR__` placeholders to fit your needs.  
+Edit the configuration file `.env`, changing placeholders to fit your needs. You can retrieve your UID and GID running `id -u` and `id -g`, respectively.
 
 A configured `.env` file will look like the following:
 
 ```env
+# Custom variables.
 PROJECT_NAME=awesomeidea
 PROJECT_VENDOR=mystartup
 
-COMPOSE_PROJECT_NAME=awesomeidea_mystartup
+FIX_UID=501
+FIX_GID=20
+
+PROJECT_PORT=3000
+
+# Compose CLI environment variables.
+# @see https://docs.docker.com/compose/reference/envvars
+COMPOSE_PROJECT_NAME=${PROJECT_NAME}_${PROJECT_VENDOR}
 COMPOSE_FILE=.bmeme/docker-compose.yml
 ```
 
@@ -93,7 +101,7 @@ When the application is successfully generated, we can run it with:
 ```
 ./npm start
 ```
-We can access our brand new React app opening http://localhost:3000 with our browser.
+We can access our brand new React app opening http://localhost:3000 (on linux) or http://awesomeidea.mystartup.docker (on macos) with our browser .
 Pretty straightforward, isn't it?
 
 ## Docker environment lifecycle
