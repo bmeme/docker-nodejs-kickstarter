@@ -1,0 +1,14 @@
+version: "3.4"
+services:
+  app:
+    image: node:16.13-bullseye-slim
+    entrypoint: /bin/sleep infinity
+    working_dir: /usr/src/app/
+    volumes:
+      - "../app:/usr/src/app:cached"
+    ports:
+      - "3000:3000"
+    environment:
+      - DNSDOCK_ALIAS=${PROJECT_NAME}.${PROJECT_VENDOR}.docker
+      - VIRTUAL_HOST=${PROJECT_NAME}.${PROJECT_VENDOR}.docker
+      - VIRTUAL_PORT=3000
