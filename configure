@@ -1,0 +1,56 @@
+#!/bin/bash
+
+CN="\\033[0m"
+CR="\\033[91m"
+CG="\\033[92m"
+CY="\\033[93m"
+CB="\\033[94m"
+CT="\\033[37m"
+TB="\\033[1m"
+
+echo "=============================================================================================="
+echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Configuration${CN} "
+echo "=============================================================================================="
+
+echo ""
+echo "Please specify the vendor for your new project."
+echo "Typically this is your organization name, or the organization the projects belongs to."
+echo -n -e "${CY}Vendor:${CN} "
+read VENDOR
+
+echo ""
+echo "Please specify the name for your new project."
+echo -n -e "${CY}Project name:${CN} "
+read PROJECT
+
+PUID=$(id -u)
+PGID=$(id -g)
+
+echo ""
+
+echo -e "Configuring ${CG}env${CN} files..."
+sed "s/__PROJECT__/${PROJECT}/g;s/__VENDOR__/${VENDOR}/g" .env.dist > .env
+sed "s/__UID__/${PUID}/g;s/__GID__/${PGID}/g" .env.local.dist > .env.local
+rm -f .env.dist .env.local.dist
+
+
+echo ""
+
+echo -e "Setting up ${CG}docker environment${CN} ..."
+docker-compose build
+docker-compose up -d
+
+echo ""
+
+echo -e "Removing ${CG}.git${CN} directory..."
+echo -e "Removing ${CG}configure${CN} file..."
+rm -fr configure .git app/.gitkeep
+
+echo ""
+
+echo "=============================================================================================="
+echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Configuration completed${CN}"
+echo ""
+echo -e "${CY}\"In some ways, programming is like painting. You start with a blank canvas and certain basic raw materials. You use a combination of science, art, and craft to determine what to do with them.\"${CN}"
+echo -e "${CG}Andrew Hunt${CN}"
+echo "=============================================================================================="

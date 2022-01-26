@@ -26,44 +26,19 @@ Start by cloning this repository locally on your system.
 git clone git@github.com:bmeme/docker-nodejs-kickstarter.git your-new-project-dir
 ```
 
-Move `your-new-project-dir` and remove `.git` directory.
-```
-cd your-new-project-dir && rm -rf .git LICENSE
-```
-
 ### 2. Define your project name and group
 
-Edit the configuration file `.env`, changing placeholders to fit your needs. You can retrieve your UID and GID running `id -u` and `id -g`, respectively.
+Move to `your-new-project-dir` and run `./configure` script.
 
-A configured `.env` file will look like the following:
-
-```env
-# Custom variables.
-PROJECT_NAME=awesomeidea
-PROJECT_VENDOR=mystartup
-
-FIX_UID=501
-FIX_GID=20
-
-PROJECT_PORT=3000
-
-# Compose CLI environment variables.
-# @see https://docs.docker.com/compose/reference/envvars
-COMPOSE_PROJECT_NAME=${PROJECT_NAME}_${PROJECT_VENDOR}
-COMPOSE_FILE=.bmeme/docker-compose.yml
+```
+./configure
 ```
 
-### 3. Start the docker environment
+You will be prompted for a couple of questions, than the script will do all the work for you.
 
-Now you can let `docker` create and start your local development environment. 
+### 3. Check the result
 
-To do this, it's enough to run:
-
-```bash
-docker-compose up -d
-```
-
-After this command completes successfully, you can check that everything is working by running: 
+After the `configure` command completes successfully, you can check that everything is working by running: 
 
 ```
 ./npm --version
@@ -78,14 +53,9 @@ Go ahead and read how to get the full potential out of your new development envi
 
 Suppose we want to start a new React application. Here is what you need to do to be up and running in near-zero time.
 
-### 1. Clear the app directory
+### 1. The app directory
 
 The `app` directory is mounted in the container and represents the working dir of our project.
-To create a new application we need to remove the `.gitkeep` file first.
-
-```
-rm -f app/.gitkeep
-```
 
 ### 2. Use create-react-app to generate a new React app
 
