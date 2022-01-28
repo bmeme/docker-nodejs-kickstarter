@@ -61,7 +61,7 @@ The `app` directory is mounted in the container and represents the working dir o
 
 We can run `create-react-app` using the `npx` wrapper to generate a new React application:
 ```
-./npx create-react-app --use-npm .
+./npx create-react-app .
 ```
 With this command we are telling `create-react-app` to generate the application in the current directory, that is `app` in the container.
 
