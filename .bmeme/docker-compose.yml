@@ -3,10 +3,7 @@ services:
   app:
     build: 
       context: docker/
-      args: 
-        - FIX_UID=${FIX_UID}
-        - FIX_GID=${FIX_GID}
-    entrypoint: /bin/sleep infinity
+    entrypoint: /fix-perm.sh /bin/sleep infinity
     working_dir: /usr/src/app/
     env_file:
       - ../.env.local

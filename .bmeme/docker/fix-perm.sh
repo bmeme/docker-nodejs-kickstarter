@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 NODE_UID=`id -u node`
 NODE_GID=`id -g node`
@@ -36,3 +36,5 @@ if [[ ! -z "$FIX_GID" ]] && [[ "$FIX_GID" != "$NODE_GID" ]]; then
 else
     echo "GID permissions are ok"
 fi
+
+exec "$@"
