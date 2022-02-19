@@ -3,7 +3,7 @@ services:
   app:
     build: 
       context: docker/
-    entrypoint: /fix-perm.sh /bin/sleep infinity
+    command: /bin/sleep infinity
     working_dir: /usr/src/app/
     env_file:
       - ../.env.local
