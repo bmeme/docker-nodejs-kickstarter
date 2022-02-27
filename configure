@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+source .env 
 
 CN="\\033[0m"
 CR="\\033[91m"
@@ -8,49 +10,78 @@ CB="\\033[94m"
 CT="\\033[37m"
 TB="\\033[1m"
 
+LOCAL_PATH=$(pwd)/.bmeme/bin
+
+if [[ "$1" == "env" ]]; then
+    if [[ ":$PATH:" != *":$LOCAL_PATH:"* ]]; then
+        echo -n "export PATH=\"${LOCAL_PATH}:\${PATH}\""
+    fi
+    exit 0
+fi
+
+if [[ "$1" == "build" ]]; then
+    echo ""
+    echo "=============================================================================================="
+    echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Configuration${CN} "
+    echo "=============================================================================================="
+    echo ""
+
+    if test -f ".env"; then
+        echo -e "${CG}Env${CN} file already configured."
+    else
+        echo "Please specify the vendor for your new project."
+        echo "Typically this is your organization name, or the organization the projects belongs to."
+        echo -n -e "${CY}Vendor:${CN} "
+        read VENDOR
+
+        echo ""
+        echo "Please specify the name for your new project."
+        echo -n -e "${CY}Project name:${CN} "
+        read PROJECT
+
+        echo ""
+        echo -e "Configuring ${CG}env${CN} file..."
+        sed "s/__PROJECT__/${PROJECT}/g;s/__VENDOR__/${VENDOR}/g" .env.dist > .env
+
+        echo ""
+        echo -e "Removing ${CG}.git${CN} directory..."
+    fi
+
+    echo ""
+    echo -e "Setting up ${CG}docker environment${CN} ..."
+    echo ""
+    docker-compose build --build-arg FIX_UID=$(id -u) --build-arg FIX_GID=$(id -g)
+    docker-compose up -d
+
+    echo ""
+    if [[ ":$PATH:" == *":$LOCAL_PATH:"* ]]; then
+        echo -e "Your ${CG}\$PATH${CN} is correctly set"
+    else
+        echo -e "Your ${CG}\$PATH${CN} is not configured."
+        echo ""
+        echo -e "Run: ${CY}eval \$(${0} env)${CN}"
+        echo ""
+    fi
+
+    echo ""
+    echo "=============================================================================================="
+    echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Configuration completed${CN}"
+    echo ""
+    echo -e "${CY}\"In some ways, programming is like painting.\n You start with a blank canvas and certain basic raw materials.\n You use a combination of science, art, and craft to determine what to do with them.\"${CN}"
+    echo -e "${CG}Andrew Hunt${CN}"
+    echo "=============================================================================================="
+    echo ""
+    exit 0
+fi
+
+echo ""
 echo "=============================================================================================="
-echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Configuration${CN} "
+echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Help${CN} "
 echo "=============================================================================================="
-
 echo ""
-echo "Please specify the vendor for your new project."
-echo "Typically this is your organization name, or the organization the projects belongs to."
-echo -n -e "${CY}Vendor:${CN} "
-read VENDOR
-
+echo -e "${CY}${0} build${CN}         --  Configure and build your environment"
+echo -e "${CY}eval \$(${0} env)${CN}   --  Set your \$PATH in order to use c script wrapper"
 echo ""
-echo "Please specify the name for your new project."
-echo -n -e "${CY}Project name:${CN} "
-read PROJECT
-
-PUID=$(id -u)
-PGID=$(id -g)
-
+echo -e "DNS alias: ${CG}app.${PROJECT_NAME}.${PROJECT_VENDOR}.docker${CN}"
 echo ""
-
-echo -e "Configuring ${CG}env${CN} files..."
-sed "s/__PROJECT__/${PROJECT}/g;s/__VENDOR__/${VENDOR}/g" .env.dist > .env
-sed "s/__UID__/${PUID}/g;s/__GID__/${PGID}/g" .env.local.dist > .env.local
-rm -f .env.dist .env.local.dist
-
-
-echo ""
-
-echo -e "Setting up ${CG}docker environment${CN} ..."
-docker-compose build
-docker-compose up -d
-
-echo ""
-
-echo -e "Removing ${CG}.git${CN} directory..."
-echo -e "Removing ${CG}configure${CN} file..."
-rm -fr configure .git app/.gitkeep
-
-echo ""
-
-echo "=============================================================================================="
-echo -e " ${CB}${TB}Node.JS Kickstarter${CN} - ${CB}Configuration completed${CN}"
-echo ""
-echo -e "${CY}\"In some ways, programming is like painting.\n You start with a blank canvas and certain basic raw materials.\n You use a combination of science, art, and craft to determine what to do with them.\"${CN}"
-echo -e "${CG}Andrew Hunt${CN}"
-echo "=============================================================================================="
+exit 0

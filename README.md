@@ -10,7 +10,7 @@ Top benefits:
  - isolation: you will not mess up your system, anything is containerized and could be cleared in a moment
  - consistency: Docker provides a consistent environment for your application, the same for every developer or system
 
-After the initial configuration, you will use the wrappers `./npm` and `./npx` and act pretty the same as you use to do if you have Node.js installed on your system.
+After the initial configuration, you will prefix your commands with `c` script and act pretty the same as you use to do if you have Node.js installed on your system.
 
 ## TL;DR
 
@@ -36,14 +36,27 @@ Move to `your-new-project-dir` and run `./configure` script.
 
 You will be prompted for a couple of questions, than the script will do all the work for you.
 
-### 3. Check the result
+### 4. Check the result
 
-After the `configure` command completes successfully, you can check that everything is working by running: 
+To interact with the container, you can use `.bmeme/bin/c` script.
+This script will run the command passed to him inside the container.
+
+After the `configure` command completes successfully, it will print an export command to add `.bmeme/bin` directory to `$PATH`, if needed.
+
+You can check that everything is working by running: 
 
 ```
-./npm --version
+c node --version
 ```
-Eureka! If you can see `npm` version probably anything went well, and you can start developing your awesome application!
+
+or, if `.bmeme/bin` isn't in your `$PATH`:
+
+```
+.bmeme/bin/c node --version
+```
+
+
+Eureka! If you can see `node` version probably anything went well, and you can start developing your awesome application!
 
 ### 4. (BONUS) Go further!
 
@@ -61,7 +74,7 @@ The `app` directory is mounted in the container and represents the working dir o
 
 We can run `create-react-app` using the `npx` wrapper to generate a new React application:
 ```
-./npx create-react-app .
+c npx create-react-app .
 ```
 With this command we are telling `create-react-app` to generate the application in the current directory, that is `app` in the container.
 
@@ -69,7 +82,7 @@ With this command we are telling `create-react-app` to generate the application 
 
 When the application is successfully generated, we can run it with: 
 ```
-./npm start
+c npm start
 ```
 We can access our brand new React app opening http://localhost:3000 (on linux) or http://awesomeidea.mystartup.docker (on macos) with our browser .
 Pretty straightforward, isn't it?
@@ -122,33 +135,25 @@ To summarize: you need to create the docker development environment only the fir
 Run `npm` or `npx` commands using the wrappers:
 
 ```bash
-$ ./npm --version
+$ c npm --version
 8.1.2
-$ ./npx --version
+$ c npx --version
 8.1.2
-```
-
-If you need to run other commands inside the container, you can run it with `.bmeme/bin/app`
-
-```
-$ .bmeme/bin/app node --version
-v16.13.1
 ```
 
 ## Access the container
 
-You can use the `.bmeme/bin/app` wrapper to exec commands in the container.
-If you run the script without anything, you will access a shell inside the container itself.
+You can use the `.bmeme/bin/c` script to exec a shell inside the container.
 
 ```
-.bmeme/bin/app node
+c bash
 ```
 
 ## Contributing
 
 Any feedback, bug reports or ideas are extremely welcome.
 
-Reach us through our [website](https://www.bmeme.com) or send us an email at [info@bonsaimeme.com](mailto:info@bonsaimeme.com).
+Reach us through our [website](https://www.bmeme.com) or send us an email at [info@bmeme.com](mailto:info@bmeme.com).
 
 ## License
 

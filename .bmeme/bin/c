@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+PWD=$(pwd)
+while [[ "$PWD" != "" && ! -e "$PWD/.bmeme" ]]; do
+  PWD=${PWD%/*}
+done
+
+FOUND=$PWD
+
+if [[ "${FOUND}" = "" ]]; then
+  echo "Unable to find parent bmeme project!"
+  exit -1
+fi
+
+ORIG_DIR=$(pwd)
+REL_DIR=${ORIG_DIR#"$FOUND"}
+
+set -e
+QUOTEDCMD=()
+for token in "$@"; do
+  QUOTEDCMD+=($(printf "%q" "$token"))
+done
+CMD="${QUOTEDCMD[*]}"
+
+pushd ${FOUND} > /dev/null
+.bmeme/bin/app cd ".${REL_DIR}" \; ${CMD}
+popd > /dev/null
