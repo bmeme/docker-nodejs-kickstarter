@@ -29,32 +29,32 @@ git clone git@github.com:bmeme/docker-nodejs-kickstarter.git your-new-project-di
 ### 2. Define your project name and group
 
 Move to `your-new-project-dir` and run `./configure` script.
+You will see a basic help with some information about the available commands.
+
+To configure and build your project, run:
 
 ```
-./configure
+./configure build
 ```
 
 You will be prompted for a couple of questions, than the script will do all the work for you.
 
-### 4. Check the result
+### 3. Check the result
 
 To interact with the container, you can use `.bmeme/bin/c` script.
-This script will run the command passed to him inside the container.
+This script will run the command passed to it inside the container.
 
 After the `configure` command completes successfully, it will print an export command to add `.bmeme/bin` directory to `$PATH`, if needed.
+
+```bash
+eval $(./configure env)
+```
 
 You can check that everything is working by running: 
 
 ```
 c node --version
 ```
-
-or, if `.bmeme/bin` isn't in your `$PATH`:
-
-```
-.bmeme/bin/c node --version
-```
-
 
 Eureka! If you can see `node` version probably anything went well, and you can start developing your awesome application!
 
@@ -66,26 +66,24 @@ Go ahead and read how to get the full potential out of your new development envi
 
 Suppose we want to start a new React application. Here is what you need to do to be up and running in near-zero time.
 
-### 1. The app directory
-
-The `app` directory is mounted in the container and represents the working dir of our project.
-
-### 2. Use create-react-app to generate a new React app
+### 1. Use create-react-app to generate a new React app
 
 We can run `create-react-app` using the `npx` wrapper to generate a new React application:
 ```
-c npx create-react-app .
+c npx create-react-app app
 ```
-With this command we are telling `create-react-app` to generate the application in the current directory, that is `app` in the container.
+With this command we are telling `create-react-app` to generate the application in the `app` directory.
 
 ### 3. Try it out!
 
-When the application is successfully generated, we can run it with: 
+When the application is successfully generated, move the `app` directory and run it with: 
 ```
-c npm start
+c PORT=80 npm start
 ```
-We can access our brand new React app opening http://localhost:3000 (on linux) or http://awesomeidea.mystartup.docker (on macos) with our browser .
 Pretty straightforward, isn't it?
+
+Note: to access the application with dinghy-http-proxy or dnsdock alias, see `./configure` output.
+
 
 ## Docker environment lifecycle
 
@@ -130,16 +128,6 @@ docker-compose down -v
 To summarize: you need to create the docker development environment only the first time, or after a wipeout. Once the docker environment exists, you can start and stop as you need id.
 
 
-## Using the wrappers
-
-Run `npm` or `npx` commands using the wrappers:
-
-```bash
-$ c npm --version
-8.1.2
-$ c npx --version
-8.1.2
-```
 
 ## Access the container
 
