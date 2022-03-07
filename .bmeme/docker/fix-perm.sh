@@ -1,9 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-NODE_UID=`id -u node`
-NODE_GID=`id -g node`
+DOCKER_USER_UID=`id -u ${DOCKER_USER}`
+DOCKER_GROUP_GID=`id -g ${DOCKER_GROUP}`
 
-if [[ ! -z "$FIX_UID" ]] && [[ "$FIX_UID" != "$NODE_UID" ]]; then
+echo "user: ${DOCKER_USER} userId: ${DOCKER_USER_UID} fixId: ${FIX_UID}"
+
+if [[ ! -z "$FIX_UID" ]] && [[ "$FIX_UID" != "$DOCKER_USER_UID" ]]; then
     echo "Fixing UID permissions"
 
     # Check if $FIX_UID already exists in container
@@ -14,13 +16,13 @@ if [[ ! -z "$FIX_UID" ]] && [[ "$FIX_UID" != "$NODE_UID" ]]; then
         usermod -u 888 $PREV_USER
     fi
 
-    find / -user ${NODE_UID} -exec chown -h ${FIX_UID} {} \; 2>/dev/null
-    usermod -u ${FIX_UID} node
+    find / -user ${DOCKER_USER_UID} -exec chown -h ${FIX_UID} {} \; 2>/dev/null
+    usermod -u ${FIX_UID} ${DOCKER_USER}
 else
     echo "UID permissions are ok"
 fi
 
-if [[ ! -z "$FIX_GID" ]] && [[ "$FIX_GID" != "$NODE_GID" ]]; then
+if [[ ! -z "$FIX_GID" ]] && [[ "$FIX_GID" != "$DOCKER_GROUP_GID" ]]; then
     echo "Fixing GID permissions"
 
     # Check if $FIX_GID already exists in container
@@ -31,8 +33,8 @@ if [[ ! -z "$FIX_GID" ]] && [[ "$FIX_GID" != "$NODE_GID" ]]; then
         groupmod -g 888 $PREV_GROUP
     fi
 
-    find / -group ${NODE_GID} -exec chgrp -h ${FIX_GID} {} \; 2>/dev/null
-    groupmod -g ${FIX_GID} node
+    find / -group ${DOCKER_GROUP_GID} -exec chgrp -h ${FIX_GID} {} \; 2>/dev/null
+    groupmod -g ${FIX_GID} ${DOCKER_GROUP}
 else
     echo "GID permissions are ok"
 fi

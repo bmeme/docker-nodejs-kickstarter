@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
 set -e
-QUOTEDCMD=()
-for token in "$@"; do
-  QUOTEDCMD+=($(printf "%q" "$token"))
+
+for var in "$@"
+do
+    PARAMS="$PARAMS ${var}"
 done
-CMD="${QUOTEDCMD[*]}"
-if [[ -z "$CMD" ]]
-then
-  CMD="sh"
-fi
 
 if [[ -t 1 ]] ; then OPTS=""; else OPTS="-T"; fi
 
-docker-compose exec -u $(id -u):$(id -g) ${OPTS} app /bin/sh -c "${CMD}"
+docker-compose exec -u $(id -u):$(id -g) ${OPTS} app /bin/bash -c "${PARAMS}"

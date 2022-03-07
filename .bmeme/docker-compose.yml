@@ -3,15 +3,16 @@ services:
   app:
     build: 
       context: docker/
+      args:
+        - DOCKER_USER=node
+        - DOCKER_GROUP=node
     command: /bin/sleep infinity
-    working_dir: /usr/src/app/
-    env_file:
-      - ../.env.local
+    working_dir: /usr/src/
     volumes:
-      - "../app:/usr/src/app:cached"
-    ports:
-      - "${PROJECT_PORT}:${PROJECT_PORT}"
+      - "../:/usr/src:cached"
+    expose:
+      - "80"
     environment:
-      - DNSDOCK_ALIAS=${PROJECT_NAME}.${PROJECT_VENDOR}.docker
-      - VIRTUAL_HOST=${PROJECT_NAME}.${PROJECT_VENDOR}.docker
-      - VIRTUAL_PORT=${PROJECT_PORT}
+      - DNSDOCK_ALIAS=app.${PROJECT_NAME}.${PROJECT_VENDOR}.docker
+      - VIRTUAL_HOST=app.${PROJECT_NAME}.${PROJECT_VENDOR}.docker
+      - VIRTUAL_PORT=80
