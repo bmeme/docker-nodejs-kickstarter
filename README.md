@@ -16,7 +16,7 @@ After the initial configuration, you will prefix your commands with `c` script a
 
 ### 0. Check your requirements
 
-To let anything works, you need to have `docker` and `docker-compose` installed and configured on your system.
+To let anything work, you need to have `docker` and `docker-compose` installed and configured on your system.
 
 ### 1. Clone this repository
 
@@ -28,26 +28,24 @@ git clone git@github.com:bmeme/docker-nodejs-kickstarter.git your-new-project-di
 
 ### 2. Define your project name and group
 
-Move to `your-new-project-dir` and run `./configure` script.
-You will see a basic help with some information about the available commands.
-
+Move to `your-new-project-dir`.
 To configure and build your project, run:
 
 ```
-./configure build
+./bmeme create
 ```
 
-You will be prompted for a couple of questions, than the script will do all the work for you.
+You will be prompted for a couple of questions, then the script will do all the work for you.
 
 ### 3. Check the result
 
 To interact with the container, you can use `.bmeme/bin/c` script.
 This script will run the command passed to it inside the container.
 
-After the `configure` command completes successfully, it will print an export command to add `.bmeme/bin` directory to `$PATH`, if needed.
+After the `bmeme create` command completes successfully, it will print an export command to add `.bmeme/bin` directory to `$PATH`, if needed.
 
 ```bash
-eval $(./configure env)
+eval $(./bmeme env)
 ```
 
 You can check that everything is working by running: 
@@ -62,6 +60,8 @@ Eureka! If you can see `node` version probably anything went well, and you can s
 
 Go ahead and read how to get the full potential out of your new development environment by understanding the docker environment lifecycle, how to use the wrappers and how to interact directly with your container!
 
+Also if you run `./bmeme` script without arguments you will see basic help with some information about the available commands.
+
 ## Example: create a bright new React App
 
 Suppose we want to start a new React application. Here is what you need to do to be up and running in near-zero time.
@@ -72,18 +72,40 @@ We can run `create-react-app` using the `npx` wrapper to generate a new React ap
 ```
 c npx create-react-app app
 ```
-With this command we are telling `create-react-app` to generate the application in the `app` directory.
+With this command, we are telling `create-react-app` to generate the application in the `app` directory.
 
 ### 3. Try it out!
 
-When the application is successfully generated, move the `app` directory and run it with: 
+When the application is successfully generated, move to the `app` directory and run it with: 
 ```
 c PORT=80 npm start
 ```
 Pretty straightforward, isn't it?
 
-Note: to access the application with dinghy-http-proxy or dnsdock alias, see `./configure` output.
+Note: to access the application with dinghy-http-proxy or dnsdock alias, see `./bmeme` output.
 
+
+## Example: create a bright new Remix App
+
+Suppose we want to create a React application, using one of [their stacks](https://remix.run/docs/en/v1/pages/stacks). Here is what you need to do to be up and running in near-zero time.
+
+### 1. Use create-remix to generate a new Remix app
+
+We can run `create-react-app` using the `npx` wrapper to generate a new React application:
+```
+c npx create-remix --template remix-run/indie-stack app
+```
+With this command, we are telling `create-remix` to generate the application in the `app` directory.
+
+### 3. Try it out!
+
+When the application is successfully generated, move to the `app` directory and run it with: 
+```
+c PORT=80 npm run dev
+```
+Pretty straightforward, isn't it?
+
+Note: to access the application with dinghy-http-proxy or dnsdock alias, see `./bmeme` output.
 
 ## Docker environment lifecycle
 
@@ -149,6 +171,7 @@ Reach us through our [website](https://www.bmeme.com) or send us an email at [in
 
 ## References
 
-- [Node.js Docker official images](https://hub.docker.com/_/node)
 - [BMEME Digital Factory](https://www.bmeme.com)
+- [Node.js Docker official images](https://hub.docker.com/_/node)
 - [Create a new React App](https://reactjs.org/docs/create-a-new-react-app.html)
+- [Create a new Remix App](https://remix.run/docs/en/v1/tutorials/blog#creating-the-project)
