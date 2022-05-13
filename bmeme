@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+set -e
+if ! test -f ".env"; then
+    .bmeme/build/extra/configure.sh
+fi
+source .env 
+source .bmeme/build/common/lib.sh
+
+mkdir -p "${BASE_PRJ_DIR}/.bmeme/log"
+
+command_env() {
+    if [[ ":$PATH:" != *":$LOCAL_PATH:"* ]]; then
+        echo -n "export PATH=\"${LOCAL_PATH}:\${PATH}\""
+    fi
+}
+
+log_begin
+
+if [[ "$1" == "env" ]]; then
+    command_env
+    log_end
+    exit 0
+fi
+
+if [[ -f ".bmeme/build/commands/$1.sh" ]]; then
+    bash -c ".bmeme/build/commands/$1.sh run"
+    log_end
+    exit 0
+fi
+
+echo ""
+echo "=============================================================================================="
+echo -e " ${CB}${TB}${COMPOSE_PROJECT_NAME}${CN} - ${CB}Help${CN} "
+echo "=============================================================================================="
+echo ""
+echo -e "${CY}${0} help${CN}           --  Show help on how to use this script"
+for i in $(ls .bmeme/build/commands); do
+    CMD_DESCR=$(.bmeme/build/commands/$i descr)
+    echo -e "${CY}${0} ${i%.*}${CN}           -- ${CMD_DESCR}"
+done
+echo -e "${CY}eval \$(${0} env)${CN}   --  Set your \$PATH in order to use c script wrapper"
+echo ""
+
+if test -f ".env"; then
+    echo -e "${CR}${TB}DNS aliases${CN}"
+    echo ""
+    echo -e "These aliases work if you have ${CY}dinghy-http-proxy${CN} on MacOs or ${CY}dnsdock${CN} on Linux configured."
+    echo ""
+    echo -e " - ${CG}http://app.${PROJECT_NAME}.${PROJECT_VENDOR}.docker${CN}"
+    echo ""
+fi
+exit 0

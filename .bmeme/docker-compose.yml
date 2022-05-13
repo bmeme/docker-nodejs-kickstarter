@@ -11,8 +11,8 @@ services:
     volumes:
       - "../:/usr/src:cached"
     expose:
-      - "80"
+      - "${PROJECT_PORT}"
     environment:
       - DNSDOCK_ALIAS=app.${PROJECT_NAME}.${PROJECT_VENDOR}.docker
       - VIRTUAL_HOST=app.${PROJECT_NAME}.${PROJECT_VENDOR}.docker
-      - VIRTUAL_PORT=80
+      - VIRTUAL_PORT=${PROJECT_PORT}
