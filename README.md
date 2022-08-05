@@ -16,44 +16,34 @@ After the initial configuration, you will prefix your commands with `c` script a
 
 ### 0. Check your requirements
 
-To let anything works, you need to have `docker` and `docker-compose` installed and configured on your system.
+To use this build, you need to have [Memento](https://github.com/bmeme/memento), [Memento Kickstarter plugin](https://github.com/bmeme/memento-kickstarter) and [Memento Docker plugin](https://github.com/bmeme/memento-docker) installed.
 
-### 1. Clone this repository
+### 1. Init a new project with memento kickstarter
 
-Start by cloning this repository locally on your system. 
-
-```
-git clone git@github.com:bmeme/docker-nodejs-kickstarter.git your-new-project-dir
+Start by creating a new project using this repository as template.
+```bash
+memento kickstarter create nodejs
 ```
 
 ### 2. Define your project name and group
 
-Move to `your-new-project-dir` and run `./configure` script.
-You will see a basic help with some information about the available commands.
+Move to your new project dir and run `memento docker configure`.
+You will be asked a couple of questions to complete the project startup.
+If everything is ok you will see a basic help with some information about the available commands.
 
-To configure and build your project, run:
-
+To create the docker environment for your project, run:
+```bash
+memento docker configure create
 ```
-./configure build
-```
-
-You will be prompted for a couple of questions, than the script will do all the work for you.
 
 ### 3. Check the result
 
-To interact with the container, you can use `.bmeme/bin/c` script.
-This script will run the command passed to it inside the container.
+To interact with the container, you can use `memento docker cmd`.
+It will run the command passed to it inside the container.
 
-After the `configure` command completes successfully, it will print an export command to add `.bmeme/bin` directory to `$PATH`, if needed.
-
+You can check that everything is working by running:
 ```bash
-eval $(./configure env)
-```
-
-You can check that everything is working by running: 
-
-```
-c node --version
+memento docker cmd node --version
 ```
 
 Eureka! If you can see `node` version probably anything went well, and you can start developing your awesome application!
@@ -70,7 +60,7 @@ Suppose we want to start a new React application. Here is what you need to do to
 
 We can run `create-react-app` using the `npx` wrapper to generate a new React application:
 ```
-c npx create-react-app app
+memento docker cmd npx create-react-app app
 ```
 With this command we are telling `create-react-app` to generate the application in the `app` directory.
 
@@ -78,63 +68,19 @@ With this command we are telling `create-react-app` to generate the application 
 
 When the application is successfully generated, move the `app` directory and run it with: 
 ```
-c PORT=80 npm start
+memento docker cmd PORT=80 npm start
 ```
 Pretty straightforward, isn't it?
 
-Note: to access the application with dinghy-http-proxy or dnsdock alias, see `./configure` output.
-
-
-## Docker environment lifecycle
-
-This project creates a docker environment that you can use to develop and build your Node.js application. 
-The docker environment lifecycle could be summarized as follow: `build`, `start`, `stop` and `clean`.
-
-![Docker Environment Lifecycle](https://user-images.githubusercontent.com/445544/122754211-a5494500-d293-11eb-85a6-13a1d3657daa.jpg)
-
-To create the docker development environment, you will use the following command:
-
-```
-$ docker-compose up -d
-```
-
-This command prepares and starts a container where you will run your application.
-
-To check the status, use `docker-compose ps`.
-For example, if the container is up and running you will see something like this:
-
-```
-$ docker-compose ps
-           Name                     Command         State   Ports
------------------------------------------------------------------
-awesomeidea_mystartup_app_1   /bin/sleep infinity   Up
-```
-
-When you don't need to use your development environment, you can stop it:
-```bash
-docker-compose stop
-```
-
-Of course, you can start it again when you come back to development:
-```bash
-docker-compose start
-```
-
-In case you want to wipe out your docker environment, you can clean up everything with:
-```bash
-docker-compose down -v
-```
-
-To summarize: you need to create the docker development environment only the first time, or after a wipeout. Once the docker environment exists, you can start and stop as you need id.
-
+Note: to access the application with dinghy-http-proxy or dnsdock alias, see `memento docker configure` output.
 
 
 ## Access the container
 
-You can use the `.bmeme/bin/c` script to exec a shell inside the container.
+You can run a shell directly inside the container:
 
-```
-c bash
+```bash
+memento docker cmd bash
 ```
 
 ## Contributing
@@ -149,6 +95,9 @@ Reach us through our [website](https://www.bmeme.com) or send us an email at [in
 
 ## References
 
-- [Node.js Docker official images](https://hub.docker.com/_/node)
 - [BMEME Digital Factory](https://www.bmeme.com)
+- [Memento](https://github.com/bmeme/memento)
+- [Memento Kickstarter plugin](https://github.com/bmeme/memento-kickstarter)
+- [Memento Docker plugin](https://github.com/bmeme/memento-docker)
+- [Node.js Docker official images](https://hub.docker.com/_/node)
 - [Create a new React App](https://reactjs.org/docs/create-a-new-react-app.html)
