@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+source "${SCRIPT_DIR}/../common/lib.sh"
+
+for var in "$@"
+do
+    PARAMS="$PARAMS ${var}"
+done
+
+if [[ -t 1 ]] ; then OPTS=""; else OPTS="-T"; fi
+
+docker-compose ps ${CONTAINER} | grep -q Up | true
+ret=${PIPESTATUS[1]}
+if [ $ret -eq 1 ]; then
+  echo -e "${CR}Error${CN} - It seems that the ${CONTAINER} container is not running"
+  exit 1
+fi
+
+docker-compose exec -u $(id -u):$(id -g) ${OPTS} ${CONTAINER} /bin/bash -c "${PARAMS}"

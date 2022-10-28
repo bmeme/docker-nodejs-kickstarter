@@ -17,12 +17,21 @@ if test -f "${BASE_PRJ_DIR}/.env"; then
 fi
 APP_DIR="${BASE_PRJ_DIR}/app"
 
-LOCAL_PATH="${BASE_PRJ_DIR}/.bmeme/bin"
-C_BIN="${BASE_PRJ_DIR}/.bmeme/bin/c"
-LOGDIR="${BASE_PRJ_DIR}/.bmeme/log"
-DATE=$(date +%Y-%m-%d_%H-%M-%S)
+CONTAINER="app"
+
+BUILD_DIR="${BASE_PRJ_DIR}/.bmeme/build"
+LOCAL_PATH="${BUILD_DIR}/bin"
+C_BIN="${LOCAL_PATH}/c"
+APP_BIN="${LOCAL_PATH}/app"
+
+LOGDIR="${BASE_PRJ_DIR}/.bmeme/build/log"
 LOGFILE="${LOGDIR}/configure.log"
 LOGPREFIX=">>>> "
+
+# Load custom configuration
+if test -f "${BUILD_DIR}/config"; then
+    source "${BUILD_DIR}/config"
+fi
 
 log_begin() {
     echo "" >>${LOGFILE}

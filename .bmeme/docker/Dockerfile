@@ -1,4 +1,4 @@
-FROM node:16.16-bullseye-slim
+FROM node:16.18-bullseye-slim
 
 RUN set -eux; \
     apt-get update -y && apt-get install -y git less libcap2-bin ; \

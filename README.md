@@ -10,34 +10,48 @@ Top benefits:
  - isolation: you will not mess up your system, anything is containerized and could be cleared in a moment
  - consistency: Docker provides a consistent environment for your application, the same for every developer or system
 
-After the initial configuration, you will prefix your commands with `c` script and act pretty the same as you use to do if you have Node.js installed on your system.
-
 ## TL;DR
 
 ### 0. Check your requirements
 
 To use this build, you need to have [Memento](https://github.com/bmeme/memento), [Memento Kickstarter plugin](https://github.com/bmeme/memento-kickstarter) and [Memento Docker plugin](https://github.com/bmeme/memento-docker) installed.
+Alternatively, you can use the `./configure` script.
 
 ### 1. Init a new project with memento kickstarter
+
+#### Using memento kickstarter
 
 Start by creating a new project using this repository as template.
 ```bash
 memento kickstarter create nodejs
 ```
+#### Cloning the repository manually
+Start by creating a new project using this repository as template.
+```bash
+git clone https://github.com/bmeme/docker-nodejs-kickstarter.git
+```
 
 ### 2. Define your project name and group
 
+#### Using memento docker 
 Move to your new project dir and run `memento docker configure`.
 You will be asked a couple of questions to complete the project startup.
 If everything is ok you will see a basic help with some information about the available commands.
 
 To create the docker environment for your project, run:
 ```bash
-memento docker configure create
+memento docker configure docker:create
+```
+
+#### Running the configure script
+
+```bash
+./configure docker:create
 ```
 
 ### 3. Check the result
 
+#### Using memento docker
 To interact with the container, you can use `memento docker cmd`.
 It will run the command passed to it inside the container.
 
@@ -47,6 +61,16 @@ memento docker cmd node --version
 ```
 
 Eureka! If you can see `node` version probably anything went well, and you can start developing your awesome application!
+
+#### Setting the c wrapper
+
+```bash
+eval $(./configure env)
+```
+
+```bash
+c node --version
+```
 
 ### 4. (BONUS) Go further!
 
@@ -58,22 +82,35 @@ Suppose we want to start a new React application. Here is what you need to do to
 
 ### 1. Use create-react-app to generate a new React app
 
+#### Using memento docker
 We can run `create-react-app` using the `npx` wrapper to generate a new React application:
-```
+```bash
 memento docker cmd npx create-react-app app
 ```
 With this command we are telling `create-react-app` to generate the application in the `app` directory.
 
+#### Using the c wrapper
+
+```bash
+c npx create-react-app app
+```
+
 ### 3. Try it out!
 
+#### Using memento docker
 When the application is successfully generated, move the `app` directory and run it with: 
-```
-memento docker cmd PORT=80 npm start
+```bash
+memento docker configure node:start
 ```
 Pretty straightforward, isn't it?
 
 Note: to access the application with dinghy-http-proxy or dnsdock alias, see `memento docker configure` output.
 
+#### Using the configure script
+
+```bash
+./configure node:start
+```
 
 ## Access the container
 
